@@ -1,63 +1,69 @@
-# Junior Front-end Engineer Assignment - Aug 2025
+# React + TypeScript + Vite
 
-* Copyright (c) River Flow Solutions, Jsc. 2025. All rights reserved.
-* We only use the submissions for candidates evaluation.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Assignment List
+Currently, two official plugins are available:
 
-- Layout Implementation (CSS, HTML)
-- Multi-Step Form with Live PDF Preview
-- Map & Location List Synchronization
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## General Requirements
+## Expanding the ESLint configuration
 
-- Use either [ShaDN](https://ui.shadcn.com/), [TailwindCSS](https://tailwindcss.com/) for UI layout
-- Use either of ReactJS, VueJS, Svelte-Kit for the Main Framework.
-- Use either of the following libaries for State Management:
-  - [Redux-toolkit](https://redux-toolkit.js.org/)
-  - [Nanostores](https://github.com/nanostores/nanostores)
-- No limit of using AI / help as long as the candidate can understand and explain the related technical details.
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-## Instructions
+```js
+export default tseslint.config([
+  globalIgnores(["dist"]),
+  {
+    files: ["**/*.{ts,tsx}"],
+    extends: [
+      // Other configs...
 
-Candidate must fork this repository to a public repo under their name for submission.
+      // Remove tseslint.configs.recommended and replace with this
+      ...tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      ...tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      ...tseslint.configs.stylisticTypeChecked,
 
-Each candidate must implement at least 2 assignments out of 3 from the list. 
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+]);
+```
 
-In case of technical difficulties, candidate may describe how the problem should be resolved in NARRATION.md. However, executable code is always preferrable.
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-Remember reply to email when you complete the assignment.
+```js
+// eslint.config.js
+import reactDom from "eslint-plugin-react-dom";
+import reactX from "eslint-plugin-react-x";
 
-## A1: Layout Implementation
-
-Implement Figma Screens, using frameworks like TailwindCSS, Bootstrap, or custom CSS.
-- Download and import [Design](rfx_figma_recur_aug_2025.fig) to your figma.
-- Use the exact font designed in figma
-- Use the exact colors and spacing designed in figma
-- Pixel perfect implementation
-- Handle interactive states (carousel, hover, etc.)
-
-## A2: Multi-Step Form with Live PDF Preview
-
-Implement an application that allows user to fill a multi-step form and preview the filled form as a PDF preview.
-- The application must have at least 3 distinct steps, with each step containing its own form.
-- Users can navigate forward and backward, all previously entered data must be preserved when moving between steps.
-- Users can reset the data of the entire form.
-- Can only click the "Continue" button after filling in all the fields in the form.
-- When the user submits (for each step of the form or the entire application), immediately display the data on the PDF preview area.
-- Show progress bar of the whole process.
-- Validate the form data before submitting.
-
-## A3: Map & Location List Synchronization
-
-Use either [Mapbox GL](https://docs.mapbox.com/mapbox-gl-js/), [Leaflet](https://leafletjs.com/) or [Google Maps](https://developers.google.com/maps/documentation) for the map component.
-
-Implement a component that render the [Location List](location.json) as a list of locations with map synchronization.
-- Display the list of locations in a list view and all locations must be marked on the map.
-- Allow user to sort the list of locations by rating.
-- Allow user to search the list of locations by name or address.
-- Allow user to select a location from the list and the map will be synchronized with the selected location (fly to the selected location).
-- Allow user to select map marker and the list will be synchronized with the selected location (scroll to the selected location in the list).
-- Hightlight both the list and the map marker of the selected location.
-- Show a popup/tooltip with location details when clicking the marker.
-- Optimize the locations list for large dataset.
+export default tseslint.config([
+  globalIgnores(["dist"]),
+  {
+    files: ["**/*.{ts,tsx}"],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs["recommended-typescript"],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+]);
+```
